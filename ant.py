@@ -1,5 +1,4 @@
 import numpy as np
-import json
 import queue
 from world import gameObject
 
@@ -16,6 +15,12 @@ class ant(gameObject):
         self.facing = 0
         self.commands = queue.Queue(10)
         self.active = True
+        self.info = {
+            "name":self.name,
+            "facing":directions[self.facing],
+            "ahead":str(self.world.getPos(self.ahead())),
+            "status":"idle"
+            }
 
     def ahead(self):
         if self.facing == 0:
@@ -31,39 +36,33 @@ class ant(gameObject):
         try:
             self.commands.put(command, False)
         except queue.Full:
-            #print(self.name+": queue full")
             pass
 
     def tick(self):
         try:
             self.commands.get(False)()
         except queue.Empty:
-            #print(self.name+": idle")
-            pass
+            self.setStatus("idle")
+
+    def setStatus(self, state):
+        self.info["status"] = state
 
     def move(self):
+        self.setStatus("moving")
         with self.world.actionLock:
             newpos = self.ahead()
             if self.world.getPos(newpos) == None:
                 self.position = newpos
             return
-        #print(self.name+": failed to move {}:{}".format(newpos, self.world.getPos(newpos)))
 
     def turnLeft(self):
+        self.setStatus("turning Left")
         self.facing -= 1
         if self.facing < 0:
             self.facing = 3
-        #print(self.name+": turned left")
 
     def turnRight(self):
+        self.setStatus("turning Right")
         self.facing += 1
         if self.facing > 3:
             self.facing = 0
-        #print(self.name+": turned right")
-
-    def status(self):
-        return json.dumps({
-            "facing":directions[self.facing],
-            "ahead":str(self.world.getPos(self.ahead()))
-            "commands":self.queue.qsize()
-            })
