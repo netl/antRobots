@@ -17,7 +17,7 @@ class ant(gameObject):
         self.info = {
             "name":self.name,
             "facing":directions[self.facing],
-            "ahead":str(self.world.getPos(self.ahead())),
+            "ahead":None,
             "status":"idle"
             }
 
@@ -42,7 +42,7 @@ class ant(gameObject):
             self.commands.get(False)()
         except queue.Empty:
             self.setStatus("idle")
-        self.info["ahead"]:str(self.world.getPos(self.ahead())),
+        self.info["ahead"]:str(self.world.getPos(self.ahead()))
 
     def setStatus(self, state):
         self.info["status"] = state

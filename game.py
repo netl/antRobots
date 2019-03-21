@@ -23,7 +23,6 @@ class game():
         threads = []
         for obj in self.w.objects:
             if getattr(obj, "tick", False):
-                print(o.status())
                 t = threading.Thread(target=obj.tick())
                 threads.append(t)
                 t.start()
