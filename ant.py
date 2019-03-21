@@ -14,7 +14,6 @@ class ant(gameObject):
         super().__init__(name)
         self.facing = 0
         self.commands = queue.Queue(10)
-        self.active = True
         self.info = {
             "name":self.name,
             "facing":directions[self.facing],
@@ -43,6 +42,7 @@ class ant(gameObject):
             self.commands.get(False)()
         except queue.Empty:
             self.setStatus("idle")
+        self.info["ahead"]:str(self.world.getPos(self.ahead())),
 
     def setStatus(self, state):
         self.info["status"] = state
@@ -53,7 +53,6 @@ class ant(gameObject):
             newpos = self.ahead()
             if self.world.getPos(newpos) == None:
                 self.position = newpos
-
 
     def turnLeft(self):
         self.setStatus("turning Left")
