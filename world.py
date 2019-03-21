@@ -1,10 +1,12 @@
 import numpy as np
+import threading
 
 class gameObject():
     def __init__(self, name = "generic object"):
         self.name = name
         self.position = None
         self.world = None
+        self.active = False
 
     def __str__(self):
         return self.name
@@ -15,6 +17,7 @@ class world():
     def __init__(self, size = (5, 5)):
         self.size = np.array(size)
         self.objects = []
+        self.actionLock = threading.Lock()
 
     #add object to world and set its position
     def place(self, obj, position):
@@ -43,18 +46,14 @@ class world():
         m = np.full(self.size, ".")
         for o in self.objects:
             x, y = o.position
-            m[x][y] = o
+            try:
+                m[x][y] = o.name
+            except:
+                print(o.position)
+                break
        
         Map = " "
-        #draw x axis numbering
-        for x in range(self.size[0]):
-            Map += str(x) + " "
-        Map += "\n"
-
         for y in range(self.size[1]):
-            #draw y axis numbering
-            Map += str(y)
-
             for x in range(self.size[0]):
                 #get object name
                 Map += str(m[x][y]) + " "
