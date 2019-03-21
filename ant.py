@@ -53,16 +53,18 @@ class ant(gameObject):
             newpos = self.ahead()
             if self.world.getPos(newpos) == None:
                 self.position = newpos
-            return
+
 
     def turnLeft(self):
         self.setStatus("turning Left")
         self.facing -= 1
         if self.facing < 0:
             self.facing = 3
+        self.info["facing"] = directions[self.facing]
 
     def turnRight(self):
         self.setStatus("turning Right")
         self.facing += 1
         if self.facing > 3:
             self.facing = 0
+        self.info["facing"] = directions[self.facing]
