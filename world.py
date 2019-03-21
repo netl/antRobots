@@ -6,7 +6,6 @@ class gameObject():
         self.name = name
         self.position = None
         self.world = None
-        self.active = False
 
     def __str__(self):
         return self.name
