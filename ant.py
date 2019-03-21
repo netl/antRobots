@@ -65,4 +65,5 @@ class ant(gameObject):
         return json.dumps({
             "facing":directions[self.facing],
             "ahead":str(self.world.getPos(self.ahead()))
+            "commands":self.queue.qsize()
             })
